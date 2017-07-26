@@ -4,7 +4,7 @@ platforms: dotnet
 author: muralivp
 ---
 # Introduction 
-Azure functions is a new offering from Microsoft that allows you to create serverless "compute on demand" applications. In this blog we provide a generic function that can be used to convert **any console application** to a HTTP **webservice**.
+Azure functions is a new offering from Microsoft that allows you to create serverless "compute on demand" applications. This is a generic function that can be used to convert **any console application** to an HTTP **webservice**.
 
 # Getting Started - Creating a new Function App
 1. Login to - [Azure Portal](https://portal.azure.com)
