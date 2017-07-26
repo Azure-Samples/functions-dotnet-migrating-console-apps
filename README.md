@@ -10,21 +10,21 @@ Azure functions is a new offering from Microsoft that allows you to create serve
 1. Login to - [Azure Portal](https://portal.azure.com)
 2. Create a function app by specifying an App Name and storage account
 
-![Creating a new Function App](CreateFunctionApp.PNG) 
+![Creating a new Function App](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/CreateFunctionApp.PNG?raw=true) 
 
 3. Go to the function code editor and Create a New Function
 
-![Creating a new Function](CreateNewFunction.PNG) 
+![Creating a new Function](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/CreateNewFunction.PNG?raw=true) 
 
 4. Select **HTTPTrigger - C#** and name your function **ConsoleAppToFunction** with the right **Authorization Level**
 
-![Creating a new HttpTrigger](HttpTriggerWithAuthz.PNG) 
+![Creating a new HttpTrigger](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/HttpTriggerWithAuthz.PNG?raw=true) 
 
 # Adding Code
 
 1. Select the run.csx file under **View files**
 
-![Adding code to Run.csx](AddingCodeRunCsx.PNG)
+![Adding code to Run.csx](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/AddingCodeRunCsx.PNG?raw=true)
 
 Add the following code to **Run.csx**
 ```csharp
@@ -236,7 +236,7 @@ We needed a way to pass input files to our function. For this we define an **arg
 
 Once these changes are done, the function should have the following files as shown below:
 
-![Adding code to Run.csx](FinalFunction.PNG)
+![Adding code to Run.csx](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/FinalFunction.PNG?raw=true)
 
 #Interacting with the function
 1. Upload all input files to **OneDrive**
