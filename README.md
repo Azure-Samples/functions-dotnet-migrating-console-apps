@@ -10,28 +10,28 @@ Azure functions is a new offering from Microsoft that allows you to create serve
 1. Login to - [Azure Portal](https://portal.azure.com)
 2. Create a function app by specifying an App Name and storage account
 
-![Creating a new Function App](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/CreateFunctionApp.PNG?raw=true) 
+<img src="https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/CreateFunctionApp.PNG?raw=true" alt="Create a Function App"></img> 
 
 3. Go to the function code editor and Create a New Function
 
-![Creating a new Function](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/CreateNewFunction.PNG?raw=true) 
+<img src="https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/CreateNewFunction.PNG?raw=true" alt="Creating a New Function"></img> 
 
 4. Select **HTTPTrigger - C#** and name your function **ConsoleAppToFunction** with the right **Authorization Level**
 
-![Creating a new HttpTrigger](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/HttpTriggerWithAuthz.PNG?raw=true) 
+<img src="https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/HttpTriggerWithAuthz.PNG?raw=true" alt="Create an Http Trigger"></img> 
 
 # Adding Code
 
 1. Select the run.csx file under **View files**
 
-![Adding code to Run.csx](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/AddingCodeRunCsx.PNG?raw=true)
+<img src="https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/AddingCodeRunCsx.PNG?raw=true" alt="Adding code to run.csx"></img>
 
 Replace the code in **Run.csx** with [ConsoleApp Function Code](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/code/run.csx?raw=true)
 
 Since the code uses Json.Net, create a [Project.Json](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/code/Project.json?raw=true) file.
 
 We have now created a generic function that can run any console application. The configuration of which console app to run is specified in a new **FunctionConfig.json** in the following example config we specify the function to run **FFMpeg.exe**
-
+```
 {
   "name": "consoleAppToFunctions",
   "input": {
@@ -53,12 +53,13 @@ We have now created a generic function that can run any console application. The
     }
   }
 }
+```
 
 We needed a way to pass input files to our function. For this we define an **argument** of type **url**, where we expect the user to upload a file to **Onedrive** and provide the link in query string. 
 
 Once these changes are done, the function should have the following files as shown below:
 
-![Adding code to Run.csx](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/FinalFunction.PNG?raw=true)
+<img src="https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/FinalFunction.PNG?raw=true" alt="Final configuration"></img>
 
 #Interacting with the function
 1. Upload all input files to **OneDrive**
