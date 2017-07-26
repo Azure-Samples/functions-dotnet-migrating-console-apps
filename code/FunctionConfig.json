@@ -1,0 +1,21 @@
+{
+  "name": "consoleAppToFunctions",
+  "input": {
+    "command": "ffmpeg.exe -i {inputFile} {output1}",
+    "arguments": {
+      "inputFile": {
+        "url": "https://1drv.ms/v/s!AoC1hn1Q1aJCgqtQpZRcIEZvbitNHQ"
+      },
+      "output1": {
+        "localfile": "out.mp3"
+      }
+    }
+  },
+  "output": {
+    "folder": "outputFolder",
+    "binaryFile": {
+      "returnFile": "*.mp3",
+      "returnFileName": "yourFile.mp3"
+    }
+  }
+}
