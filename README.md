@@ -3,7 +3,7 @@ services: functions
 platforms: dotnet
 author: muralivp
 ---
-# Introduction 
+# Migrating Console Apps To Azure Functions 
 Azure functions is a new offering from Microsoft that allows you to create serverless "compute on demand" applications. This is a generic function that can be used to convert **any console application** to an HTTP **webservice**.
 
 # Getting Started - Creating a new Function App
