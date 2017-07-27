@@ -3,6 +3,7 @@ services: functions
 platforms: dotnet
 author: muralivp
 ---
+Best viewed in [GitHub](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/README.md) 
 # Migrating Console Apps To Azure Functions 
 Azure functions is a new offering from Microsoft that allows you to create serverless "compute on demand" applications. This is a generic function that can be used to convert **any console application** to an HTTP **webservice**.
 
@@ -33,26 +34,27 @@ Since the code uses Json.Net, create a [Project.Json](https://github.com/Azure-
 We have now created a generic function that can run any console application. The configuration of which console app to run is specified in a new **FunctionConfig.json** in the following example config we specify the function to run **FFMpeg.exe**
 ```
 {
-  "name": "consoleAppToFunctions",
-  "input": {
-    "command": "ffmpeg.exe -i {inputFile} {output1}",
-    "arguments": {
-      "inputFile": {
-        "url": "https://1drv.ms/v/<link-to-file>"
-      },
-      "output1": {
-        "localfile": "out.mp3"
-      }
+    "name": "consoleAppToFunctions",
+    "input": {
+        "command": "ffmpeg.exe -i {inputFile} {output1}",
+        "arguments": {
+            "inputFile": {
+                "url": "https://1drv.ms/v/<link-to-file>"
+            },
+            "output1": {
+                "localfile": "out.mp3"
+            }
+        }
+    },
+    "output": {
+        "folder": "outputFolder",
+        "binaryFile": {
+            "returnFile": "*.mp3",
+            "returnFileName": "yourFile.mp3"
+        }
     }
-  },
-  "output": {
-    "folder": "outputFolder",
-    "binaryFile": {
-      "returnFile": "*.mp3",
-      "returnFileName": "yourFile.mp3"
-    }
-  }
 }
+
 ```
 
 We needed a way to pass input files to our function. For this we define an **argument** of type **url**, where we expect the user to upload a file to **Onedrive** and provide the link in query string. 
