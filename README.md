@@ -61,7 +61,7 @@ Once these changes are done, the function should have the following files as sho
 
 <img src="https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/FinalFunction.PNG?raw=true" alt="Final configuration"></img>
 
-#Interacting with the function
+# Interacting with the function
 1. Upload all input files to **OneDrive**
 2. Get a link to the file using the OneDrive **Share** menu - something like https://1drv.ms/v/<link-to-file>
 3. Interact with the function providing the inputs as querystring something like
