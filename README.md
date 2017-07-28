@@ -75,10 +75,10 @@ Once these changes are done, the function should have the following files as sho
 # Interacting with the function
 1. Upload your test input file(s) to **OneDrive**
 2. Get a link to the file using the OneDrive **Share** menu - something like https://1drv.ms/v/<link-to-file>
-3. Interact with the function providing the inputs as querystring. Note that 'inputFile' here is defined in the **FunctionConfig.json** file above
+3. Interact with the function providing the inputs as querystring. Note that `inputFile` here is defined in the **FunctionConfig.json** file above
 
 Example URL:
 ```
-https://consoletofunctions.azurewebsites.net/api/ConsoleAppToFunctions?code=<function-authorization-key>&inputFile=<link-to-onedrive-file>
+https://[the URL when you click 'Get Function URL']&inputFile=<link-to-onedrive-file>
 ```
 The function will process this request by invoking the specified console app and provide the output as a file download.
