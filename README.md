@@ -5,7 +5,13 @@ author: muralivp
 ---
 Best viewed in [GitHub](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/README.md) 
 # Migrating Console Apps To Azure Functions 
-Azure functions is a new offering from Microsoft that allows you to create serverless "compute on demand" applications. This is a generic function that can be used to convert **any console application** to an HTTP **webservice**.
+This is a generic function that can be used to convert **any console application** to an HTTP **webservice** in Azure Functions.  All you have to do is edit a configuration file and specify what input parameters will be passed as arguments to the .exe.
+
+Azure functions is a new offering from Microsoft that allows you to create serverless "compute on demand" applications. 
+
+# Features
+- You can use binary files as input (specify the URL and the binary file will be downloaded to a temporary location on the virtual environment hosting your Azure Function)
+- You choose which file is sent back to the user as output
 
 # Getting Started - Creating a new Function App
 1. Login to - [Azure Portal](https://portal.azure.com)
@@ -57,7 +63,7 @@ We have now created a generic function that can run any console application. The
 
 ```
 
-We needed a way to pass input files to our function. For this we define an **argument** of type **url**, where we expect the user to upload a file to **Onedrive** and provide the link in query string. 
+We needed a way to pass binary input files to our function. For this we define an **argument** of type **url**, where we expect the user to upload a file to **Onedrive** and provide the link in query string. 
 
 Once these changes are done, the function should have the following files as shown below:
 
@@ -66,7 +72,9 @@ Once these changes are done, the function should have the following files as sho
 # Interacting with the function
 1. Upload all input files to **OneDrive**
 2. Get a link to the file using the OneDrive **Share** menu - something like https://1drv.ms/v/<link-to-file>
-3. Interact with the function providing the inputs as querystring something like
+3. Interact with the function providing the inputs as querystring. Note that 'inputFile' here is defined in the **FunctionConfig.json** file above
+
+Example URL:
 ```
 https://consoletofunctions.azurewebsites.net/api/ConsoleAppToFunctions?code=<function-authorization-key>&inputFile=<link-to-onedrive-file>
 ```
