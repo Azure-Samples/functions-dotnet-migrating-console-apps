@@ -4,7 +4,7 @@ platforms: dotnet
 author: muralivp
 ---
 Best viewed in [GitHub](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/README.md) 
-# Migrating Console Apps To Azure Functions 
+# Run Console Apps on Azure Functions 
 This is a generic function that can be used to convert **any console application** to an HTTP **webservice** in Azure Functions.  All you have to do is edit a configuration file and specify what input parameters will be passed as arguments to the .exe.
 
 Azure functions is a new offering from Microsoft that allows you to create serverless "compute on demand" applications. 
