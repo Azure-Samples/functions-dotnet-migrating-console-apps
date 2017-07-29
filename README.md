@@ -5,9 +5,13 @@ author: muralivp
 ---
 Best viewed in [GitHub](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/README.md) 
 # Run Console Apps on Azure Functions 
-This is a generic function that can be used to convert **any console application** to an HTTP **webservice** in Azure Functions.  All you have to do is edit a configuration file and specify what input parameters will be passed as arguments to the .exe.
+tldr: 
+Here is an easy way of getting any .exe running as a web service.  You just specify the input parameters to your exe in a configuration file.  You can use binary files as inputs to the exe by specifying a URL to download it from.
 
-Azure functions is a new offering from Microsoft that allows you to create serverless "compute on demand" applications. 
+More details:
+This sample is a generic function (.csx file) that can be used to convert **any console application** to an HTTP **webservice** in Azure Functions.  All you have to do is edit a configuration file and specify what input parameters will be passed as arguments to the .exe.
+
+Azure functions is an offering from Microsoft that allows you to create serverless "compute on demand" applications. 
 
 # Features
 - You can use binary files as input (specify the URL and the binary file will be downloaded to a temporary location on the virtual environment hosting your Azure Function)
@@ -41,6 +45,7 @@ If you don't care about the details, just click the upload button and upload [th
 
 # Configuring the Sample
 We have now created a generic function that can run any console application. You can specify which console app to run in a file called **FunctionConfig.json** in the following example config we specify the function to run **FFMpeg.exe**
+
 ```
 {
     "name": "consoleAppToFunctions",
@@ -63,7 +68,6 @@ We have now created a generic function that can run any console application. You
         }
     }
 }
-
 ```
 
 We needed a way to pass binary input files to our function. For this we define an **argument** of type **url**, where we expect the user to upload a file to **Onedrive** (or whatever service that hosts a binary file) and provide the link in the query string. 
@@ -78,7 +82,9 @@ Once these changes are done, the function should have the following files as sho
 3. Interact with the function providing the inputs as querystring. Note that `inputFile` here is defined in the **FunctionConfig.json** file above
 
 Example URL:
+
 ```
 https://[the URL when you click 'Get Function URL']&inputFile=<link-to-onedrive-file>
 ```
+
 The function will process this request by invoking the specified console app and provide the output as a file download.
