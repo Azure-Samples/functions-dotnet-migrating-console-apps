@@ -1,9 +1,11 @@
-#r "Newtonsoft.Json"
+#r "Newtonsoft.Json" 
 using System.Net;
 using Newtonsoft.Json;
 using System.IO;
 using System.Diagnostics;
 
+//Code from https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/edit/master/code/run.csx
+//Written by Ambrose http://github.com/efficientHacks and Murali http://github.com/muralivp
 
 public class ExeArg
 {
@@ -12,31 +14,10 @@ public class ExeArg
     public string Value { get; set; }
 }
 
-//this is to delete the folder after the response
-public class FileHttpResponseMessage : HttpResponseMessage
-{
-    private string filePath;
-
-    public FileHttpResponseMessage(string filePath)
-    {
-        this.filePath = filePath;
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        base.Dispose(disposing);
-
-        Content.Dispose();
-
-        Directory.Delete(filePath,true);
-    }
-}
-
 public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceWriter log)
 {
     log.Info("C# HTTP trigger function processed a request.");
 
-   
     string localPath = req.RequestUri.LocalPath;
     string functionName = localPath.Substring(localPath.LastIndexOf('/')+1);
 
@@ -46,8 +27,8 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
 
     var functionArguments = config.input.arguments;
     var localOutputFolder = Path.Combine(@"d:\home\data", config.output.folder.Value, Path.GetFileNameWithoutExtension(Path.GetTempFileName()));
-    var workingDirectory = Path.Combine(@"D:\home\site\wwwroot", config.name.Value);
-    Directory.SetCurrentDirectory(workingDirectory);
+    var workingDirectory = Path.Combine(@"d:\home\site\wwwroot", config.name.Value);
+    Directory.SetCurrentDirectory(workingDirectory);//fun fact - the default working directory is d:\windows\system32
 
     var command = config.input.command.Value;
 
@@ -56,6 +37,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
 
     var argList = new List<ExeArg>();
 
+    //Parse the config file's arguments
     //handle file system, local file etc. and construct the input params for the actual calling of the .exe
     foreach (var arg in functionArguments)
     {
@@ -75,7 +57,6 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
             exeArg.Value = valueFromQueryString;
             log.Info(exeArg.Name + " " + valueFromQueryString);
         }
-        
 
         if(exeArg.Type.ToLower() == "localfile" || exeArg.Type.ToLower() == "localfolder")
         {
@@ -88,7 +69,6 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
         }
         argList.Add(exeArg);
     }
-    int i = 0;
 
     //call the exe
     Dictionary<string, string> paramList = ProcessParameters(argList, localOutputFolder);
@@ -100,11 +80,9 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
     string arguments = command.Split(new char[] { ' ' }, 2)[1];
     Process.Start(commandName, arguments).WaitForExit();
 
-
-
     //handle return file
     var path = Directory.GetFiles(localOutputFolder, outputFile)[0];
-    //HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+    
     var result = new FileHttpResponseMessage(localOutputFolder);
     var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
     result.Content = new StreamContent(stream);
@@ -115,7 +93,6 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
     };
 
     return result;
-    //do clean up
 }
 
 private static Dictionary<string, string> ProcessParameters(List<ExeArg> arguments, string outputFolder)
@@ -139,6 +116,7 @@ private static Dictionary<string, string> ProcessParameters(List<ExeArg> argumen
     return paramList;
 }
 
+//you can modify this method to handle different URLs if necessary
 private static string ProcessUrlType(string url, string outputFolder)
 {
     Directory.CreateDirectory(outputFolder);
@@ -162,5 +140,31 @@ private static string getValueFromQuery(HttpRequestMessage req, string name)
     string value = req.GetQueryNameValuePairs()
         .FirstOrDefault(q => string.Compare(q.Key, name, true) == 0)
         .Value;
+    
+    //if not found in query string, look for it in the body (json)
+    // Get request body
+    dynamic data = await req.Content.ReadAsAsync<object>();
+
+    // Set name to query string or body data
+    value = value ?? data?[name];
     return value;
+}
+
+//this is to delete the folder after the response
+//thanks to: https://stackoverflow.com/a/30522890/2205372
+public class FileHttpResponseMessage : HttpResponseMessage
+{
+    private string filePath;
+
+    public FileHttpResponseMessage(string filePath)
+    {
+        this.filePath = filePath;
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+        Content.Dispose();
+        Directory.Delete(filePath,true);
+    }
 }
