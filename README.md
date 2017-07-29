@@ -32,9 +32,10 @@ Azure functions is an offering from Microsoft that allows you to create serverle
 <img src="https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/HttpTriggerWithAuthz.PNG?raw=true" alt="Create an Http Trigger"></img> 
 
 # Adding Code
-The following are steps that you should follow if you're using Azure functions for the first time.  
-If you don't care about the details, just click the upload button and upload [the 3 files in the code sample](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/tree/master/code) along with the .exe (and .dll's it requires)
+If you don't care about the details, just go to your function's "Your Files > Upload Files" (top right) and upload [the 3 files in the code sample](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/tree/master/code) along with the .exe (and .dll's it requires)
 --
+The following are steps that you should follow if you want to fimiliarinze yourself with the using Azure functions interface.
+
 1. Select the run.csx file under **View files**
 
 <img src="https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/AddingCodeRunCsx.PNG?raw=true" alt="Adding code to run.csx"></img>
