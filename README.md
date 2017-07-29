@@ -16,6 +16,33 @@ Azure functions is an offering from Microsoft that allows you to create serverle
 # Features
 - You can use binary files as input (specify the URL and the binary file will be downloaded to a temporary location on the virtual environment hosting your Azure Function)
 - You choose which file is sent back to the user as output
+- Here's what the configuration file looks like (more details later)
+
+```
+{
+    "name": "consoleAppToFunctions",
+    "input": {
+        "command": "ffmpeg.exe -i {inputFile} {output1}",
+        "arguments": {
+            "inputFile": {
+                "url": "https://1drv.ms/v/<link-to-file>"
+                //binary file input
+            },
+            "output1": {
+                "localfile": "out.mp3"
+                //stored in a temp folder
+            }
+        }
+    },
+    "output": {
+        "folder": "outputFolder",
+        "binaryFile": {
+            "returnFile": "*.mp3",
+            "returnFileName": "yourFile.mp3"
+        }
+    }
+}
+```
 
 # Getting Started - Creating a new Function App
 1. Login to - [Azure Portal](https://portal.azure.com)
