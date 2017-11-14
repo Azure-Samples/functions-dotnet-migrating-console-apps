@@ -27,13 +27,11 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
 
     var functionArguments = config.input.arguments;
     var localOutputFolder = Path.Combine(@"d:\home\data", config.output.folder.Value, Path.GetFileNameWithoutExtension(Path.GetTempFileName()));
-    var workingDirectory = Path.Combine(@"d:\home\site\wwwroot", config.name.Value);
+    Directory.CreateDirectory(localOutputFolder);
+    var workingDirectory = Path.Combine(@"d:\home\site\wwwroot", functionName + "\\bin");
     Directory.SetCurrentDirectory(workingDirectory);//fun fact - the default working directory is d:\windows\system32
 
     var command = config.input.command.Value;
-
-    string outputFile = config.output.binaryFile.returnFile.Value;
-    string outputFileName = config.output.binaryFile.returnFileName.Value;
 
     var argList = new List<ExeArg>();
 
@@ -48,7 +46,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
         exeArg.Type = property.Name;
         exeArg.Value = property.Value.ToString();
 
-        var valueFromQueryString = getValueFromQuery(req, exeArg.Name);
+        var valueFromQueryString = await getValueFromQuery(req, exeArg.Name);
 
         log.Info("valueFromQueryString name=" + exeArg.Name);
         log.Info("valueFromQueryString val=" + valueFromQueryString);
@@ -78,11 +76,25 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
     }
     string commandName = command.Split(' ')[0];
     string arguments = command.Split(new char[] { ' ' }, 2)[1];
-    Process.Start(commandName, arguments).WaitForExit();
+    log.Info("the command is " + command);
+    log.Info("the working dir is " + workingDirectory);
+    Process p = new Process();
+    p.StartInfo.UseShellExecute = false;
+    p.StartInfo.RedirectStandardOutput = true;
+    p.StartInfo.FileName = commandName; 
+    p.StartInfo.Arguments = arguments;
+    p.Start();
+    string output = p.StandardOutput.ReadToEnd();
+    p.WaitForExit();
+    File.WriteAllText(localOutputFolder+"\\out.txt",output);
 
     //handle return file
+    log.Info("handling return file localOutputFolder=" + localOutputFolder);
+    string outputFile = config.output.binaryFile.returnFile.Value;
+    string outputFileName = config.output.binaryFile.returnFileName.Value;
     var path = Directory.GetFiles(localOutputFolder, outputFile)[0];
     
+    log.Info("returning this file " + path);
     var result = new FileHttpResponseMessage(localOutputFolder);
     var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
     result.Content = new StreamContent(stream);
@@ -134,7 +146,7 @@ private static string ProcessUrlType(string url, string outputFolder)
     return downloadedFile;
 }
 
-private static string getValueFromQuery(HttpRequestMessage req, string name)
+private async static Task<string> getValueFromQuery(HttpRequestMessage req, string name)
 {
     // parse query parameter
     string value = req.GetQueryNameValuePairs()
