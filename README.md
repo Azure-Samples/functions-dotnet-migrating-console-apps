@@ -54,7 +54,7 @@ Azure functions is an offering from Microsoft that allows you to create serverle
 
 <img src="https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/CreateNewFunction.PNG?raw=true" alt="Creating a New Function"></img> 
 
-4. Select **HTTPTrigger - C#** and name your function **ConsoleAppToFunction** with the right **Authorization Level**
+4. Select **HTTPTrigger - C#** and name your function **ConsoleAppToFunctions** with the right **Authorization Level**
 
 <img src="https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/HttpTriggerWithAuthz.PNG?raw=true" alt="Create an Http Trigger"></img> 
 
