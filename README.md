@@ -1,8 +1,12 @@
 ---
-services: functions
-platforms: dotnet
-author: muralivp
+languages:
+- csharp
+products:
+- azure
+- azure-functions
+topic: sample
 ---
+
 Best viewed in [GitHub](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/README.md) 
 # Run Console Apps on Azure Functions 
 tldr: 
