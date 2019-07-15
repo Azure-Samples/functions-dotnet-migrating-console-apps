@@ -4,7 +4,7 @@ languages:
 products:
 - azure
 - azure-functions
-topic: sample
+page_type: sample
 ---
 
 Best viewed in [GitHub](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/README.md) 
