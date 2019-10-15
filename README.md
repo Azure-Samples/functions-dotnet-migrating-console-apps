@@ -5,10 +5,11 @@ products:
 - azure
 - azure-functions
 page_type: sample
+description: "Here is an easy way of getting any .exe running as a web service."
 ---
 
-Best viewed in [GitHub](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/README.md) 
-# Run Console Apps on Azure Functions 
+# Run Console Apps on Azure Functions
+
 tldr: 
 Here is an easy way of getting any .exe running as a web service.  You just specify the input parameters to your exe in a configuration file.  You can use binary files as inputs to the exe by specifying a URL to download it from.
 
@@ -17,12 +18,12 @@ This sample is a generic function (.csx file) that can be used to convert **any 
 
 Azure functions is an offering from Microsoft that allows you to create serverless "compute on demand" applications. 
 
-# Features
+## Features
 - You can use binary files as input (specify the URL and the binary file will be downloaded to a temporary location on the virtual environment hosting your Azure Function)
 - You choose which file is sent back to the user as output
 - Here's what the configuration file looks like (more details later)
 
-```
+```json
 {
     "name": "consoleAppToFunctions",
     "input": {
@@ -48,7 +49,8 @@ Azure functions is an offering from Microsoft that allows you to create serverle
 }
 ```
 
-# Getting Started - Creating a new Function App
+## Getting Started - Creating a new Function App
+
 1. Login to - [Azure Portal](https://portal.azure.com)
 2. Create a function app by specifying an App Name and storage account
 
@@ -62,7 +64,7 @@ Azure functions is an offering from Microsoft that allows you to create serverle
 
 <img src="https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/HttpTriggerWithAuthz.PNG?raw=true" alt="Create an Http Trigger"></img> 
 
-# Adding Code
+## Adding Code
 > **TL;DR**  
 If you don't care about the details, just go to your function's "Your Files > Upload Files" (top right) and upload [the 3 files in the code sample](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/tree/master/code) along with the .exe (and .dll's it requires)
 
@@ -76,10 +78,10 @@ The following are steps that you should follow if you want to fimiliarinze yours
 
 3. Since the code uses Json.Net, create a [Project.Json](https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/code/Project.json?raw=true) file.
 
-# Configuring the Sample
+## Configuring the Sample
 We have now created a generic function that can run any console application. You can specify which console app to run in a file called **FunctionConfig.json** in the following example config we specify the function to run **FFMpeg.exe**
 
-```
+```json
 {
     "name": "consoleAppToFunctions",
     "input": {
@@ -109,14 +111,14 @@ Once these changes are done, the function should have the following files as sho
 
 <img src="https://github.com/Azure-Samples/functions-dotnet-migrating-console-apps/blob/master/FinalFunction.PNG?raw=true" alt="Final configuration"></img>
 
-# Interacting with the function
+## Interacting with the function
 1. Upload your test input file(s) to **OneDrive**
 2. Get a link to the file using the OneDrive **Share** menu - something like https://1drv.ms/v/<link-to-file>
 3. Interact with the function providing the inputs as querystring. Note that `inputFile` here is defined in the **FunctionConfig.json** file above
 
 Example URL:
 
-```
+```http
 https://[the URL when you click 'Get Function URL']&inputFile=<link-to-onedrive-file>
 ```
 
