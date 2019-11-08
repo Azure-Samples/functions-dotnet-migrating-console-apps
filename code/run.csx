@@ -14,6 +14,8 @@ public class ExeArg
     public string Value { get; set; }
 }
 
+//NOTE: Must use runtime v1 to use HttpRequestMessage / for this example to still work in Azure Functions
+//Similarly, TraceWriter should not be used in v2.
 public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceWriter log)
 {
     log.Info("C# HTTP trigger function processed a request.");
@@ -28,7 +30,8 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
     var functionArguments = config.input.arguments;
     var localOutputFolder = Path.Combine(@"d:\home\data", config.output.folder.Value, Path.GetFileNameWithoutExtension(Path.GetTempFileName()));
     Directory.CreateDirectory(localOutputFolder);
-    var workingDirectory = Path.Combine(@"d:\home\site\wwwroot", functionName + "\\bin");
+    log.Info("directory Created=" + localOutputFolder);
+    var workingDirectory = Path.Combine(@"d:\home\site\wwwroot", functionName + "");
     Directory.SetCurrentDirectory(workingDirectory);//fun fact - the default working directory is d:\windows\system32
 
     var command = config.input.command.Value;
@@ -67,13 +70,13 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
         }
         argList.Add(exeArg);
     }
-
     //call the exe
-    Dictionary<string, string> paramList = ProcessParameters(argList, localOutputFolder);
+    Dictionary<string, string> paramList = ProcessParameters(argList, localOutputFolder, log);
     foreach (string parameter in paramList.Keys)
     {
         command = command.Replace(parameter, paramList[parameter]);
     }
+
     string commandName = command.Split(' ')[0];
     string arguments = command.Split(new char[] { ' ' }, 2)[1];
     log.Info("the command is " + command);
@@ -98,6 +101,8 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
     var result = new FileHttpResponseMessage(localOutputFolder);
     var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
     result.Content = new StreamContent(stream);
+    //Replace 'application/octet-stream' with, for example, audio/mpeg if you want to return a mp3 file rather than
+    //raw binary, or video/mp4 to return a mp4 file
     result.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
     result.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
     {
@@ -107,7 +112,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
     return result;
 }
 
-private static Dictionary<string, string> ProcessParameters(List<ExeArg> arguments, string outputFolder)
+private static Dictionary<string, string> ProcessParameters(List<ExeArg> arguments, string outputFolder, TraceWriter log)
 {
     Dictionary<string, string> paramList = new Dictionary<string, string>();
     foreach (var arg in arguments)
@@ -115,7 +120,8 @@ private static Dictionary<string, string> ProcessParameters(List<ExeArg> argumen
         switch (arg.Type)
         {
             case "url":
-                string downloadedFileName = ProcessUrlType((string)arg.Value, outputFolder);
+                log.Info("arg Value " + (string)arg.Value);    
+                string downloadedFileName = ProcessUrlType((string)arg.Value, outputFolder, log);
                 paramList.Add("{" + arg.Name + "}", downloadedFileName);
                 break;
             case "string":
@@ -125,24 +131,27 @@ private static Dictionary<string, string> ProcessParameters(List<ExeArg> argumen
                 break;
         }
     }
+    log.Info("paramList " + paramList);
     return paramList;
 }
 
 //you can modify this method to handle different URLs if necessary
-private static string ProcessUrlType(string url, string outputFolder)
+//NOTE: IS Modified from original github example to handle non-OneDrive / 'normal' URLs
+private static string ProcessUrlType(string url, string outputFolder, TraceWriter log)
 {
-    Directory.CreateDirectory(outputFolder);
     string downloadedFile = Path.Combine(outputFolder, Path.GetFileName(Path.GetTempFileName()));
-    //for oneDrive links 
+    log.Info("downloadedFile " + downloadedFile);
+    
     HttpWebRequest webRequest = (HttpWebRequest)HttpWebRequest.Create(url);
     webRequest.AllowAutoRedirect = false;
+
     WebResponse webResp = webRequest.GetResponse();
-    webRequest = (HttpWebRequest)HttpWebRequest.Create(webResp.Headers["Location"].Replace("redir", "download"));
-    webResp = webRequest.GetResponse();
-    string fileUrl = webResp.Headers["Content-Location"];
+    log.Info("webResp Headers" + webResp.Headers);
 
     WebClient webClient = new WebClient();
-    webClient.DownloadFile(fileUrl, downloadedFile);
+    log.Info("url downloading " + url);
+    webClient.DownloadFile(url, downloadedFile);
+    
     return downloadedFile;
 }
 
