@@ -11,7 +11,7 @@ description: "Here is an easy way of getting any .exe running as a web service."
 # Run Console Apps on Azure Functions
 
 tldr: 
-Here is an easy way of getting any .exe running as a web service.  You just specify the input parameters to your exe in a configuration file.  You can use binary files as inputs to the exe by specifying a URL to download it from.
+Here is an easy way of getting any .exe running as a web service.  You just specify the input parameters to your exe in a configuration file.  You can use binary files as inputs to the exe by specifying a URL to download it from. NOTE: You must revert back to runtime ~1 in your Function App in Azure.
 
 More details:
 This sample is a generic function (.csx file) that can be used to convert **any console application** to an HTTP **webservice** in Azure Functions.  All you have to do is edit a configuration file and specify what input parameters will be passed as arguments to the .exe.
